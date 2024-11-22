@@ -1,32 +1,25 @@
-import {
-  createAdmin,
-  createAlumni,
-  createStudent,
-  getAllUsers,
-} from "../controllers/userController.js";
-import {
-  createCompany,
-  getCompanies,
-} from "../controllers/companyController.js";
-import {
-  createReview,
-  getAllReviews,
-} from "../controllers/reviewsController.js";
-import { likeReviews } from "../controllers/likesController.js";
+import {createAdmin,createTeacher,createStudent,getAllUsers,getAllTeacher,getAllStudent, getAllAdmin} from "../controller/Usercontroller.js";
+import { createSubject,getAllSubject } from "../controller/SubjectController.js";
+import { createPractical,getAllPractical} from "../controller/PracticalController.js";
+import { enrollStudent } from "../controller/EnrollController.js";
+import { isAdmin,isAdminOrTeacher,isTeacher } from "../middleware/Middleware.js";
 import express from "express";
-import { isAdmin } from "../middleware/Middleware.js";
 
+const router  = express.Router();
 
+router.post("/users/create",createAdmin);
+router.get("/users/get",isAdmin,getAllUsers);
+router.get("/admins/get",isAdmin,getAllAdmin);
+router.get("/teachers/get",isAdmin,getAllTeacher);
+router.get("/students/get",isAdminOrTeacher,getAllStudent);
+router.post("/subject/create",isAdmin,createSubject);
+router.post("/practicals/create",isTeacher,createPractical);
 
-const router = express.Router();
-
-router.post("/admin/create", createAdmin);
-router.post("/alumni/create", createAlumni);
-router.post("/student/create", createStudent);
-router.post("/company/create", isAdmin, createCompany);
-router.post("/review/create", createReview);
-router.post("/like/add", likeReviews);
-router.get("/user/get", getAllUsers);
-router.get("/company/get", getCompanies);
+router.get("/subjects/get",getAllSubject);
+router.post("/enroll/student",enrollStudent);
+router.get("/praticals/get",getAllPractical);
 
 export default router;
+
+
+
